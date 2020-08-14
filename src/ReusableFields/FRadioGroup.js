@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { getHelperText, useIsMount, MemoField } from './FieldUtils';
+import { getHelperText, useIsMount, MemoField, getEmptyObject } from './FieldUtils';
 
 export default function FRadioGroup (props) {
   const {
-    FormControlLabelProps, RadioProps, form, fieldKeyPath, validation,
+    getFormControlLabelProps = getEmptyObject, getRadioProps = getEmptyObject, form, fieldKeyPath, validation,
     radioOptions, validateOnChange = true
   } = props;
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
@@ -34,15 +34,15 @@ export default function FRadioGroup (props) {
       {radioOptions.map((option, i) => (
         <FormControlLabel
           key={i}
-          {...FormControlLabelProps}
           label={option.label}
           value={option.value}
           control={(
-            <Radio {...RadioProps} checked={option.value === value} onChange={handleChange} />
+            <Radio checked={option.value === value} onChange={handleChange} {...getRadioProps({ value: value, option })} />
           )}
           ref={form.registerField(fieldKeyPath, {
             validation: validation
           })}
+          {...getFormControlLabelProps({ value: value, option })}
         />
       ))}
       {getHelperText(fieldMetaData)}
@@ -51,8 +51,8 @@ export default function FRadioGroup (props) {
 }
 
 FRadioGroup.propTypes = {
-  FormControlLabelProps: PropTypes.object,
-  RadioProps: PropTypes.object,
+  getFormControlLabelProps: PropTypes.func,
+  getRadioProps: PropTypes.func,
   form: PropTypes.object,
   fieldKeyPath: PropTypes.string,
   validation: PropTypes.func,

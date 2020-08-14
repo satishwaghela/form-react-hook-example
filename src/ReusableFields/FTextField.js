@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import TextField from '@material-ui/core/TextField';
 
-import { getHelperText, useIsMount, MemoField } from './FieldUtils';
+import { getHelperText, useIsMount, MemoField, getEmptyObject } from './FieldUtils';
 
 export default function FTextField (props) {
-  const { TextFieldProps, form, fieldKeyPath, validation, valueChange = 'onChange', validateOnChange = true } = props;
+  const { getTextFieldProps = getEmptyObject, form, fieldKeyPath, validation, valueChange = 'onChange', validateOnChange = true } = props;
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
 
   const value = form.getFieldValue(fieldKeyPath);
@@ -38,11 +38,11 @@ export default function FTextField (props) {
         error={!fieldMetaData.validating && !!fieldMetaData.error}
         fullWidth
         {...changeHandleProps}
-        {...TextFieldProps}
         defaultValue={value || ''}
         ref={form.registerField(fieldKeyPath, {
           validation: validation
         })}
+        {...getTextFieldProps({ value: value })}
       />
       {getHelperText(fieldMetaData)}
     </>
@@ -50,7 +50,8 @@ export default function FTextField (props) {
 }
 
 FTextField.propTypes = {
-  TextFieldProps: PropTypes.object,
+  getTextFieldProps: PropTypes.func,
+  valueChange: PropTypes.string,
   form: PropTypes.object,
   fieldKeyPath: PropTypes.string,
   validateOnChange: PropTypes.bool,

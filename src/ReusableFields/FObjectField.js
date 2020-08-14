@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { getHelperText, useIsMount, MemoField } from './FieldUtils';
+import { getHelperText, useIsMount, MemoField, getEmptyObject } from './FieldUtils';
 
 export default function FObjectField (props) {
-  const { form, fieldKeyPath, validation, Comp, CompProps = {}, validateOnChange = true } = props;
+  const { form, fieldKeyPath, validation, Comp, getCompProps = getEmptyObject, validateOnChange = true } = props;
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
 
   const value = form.getFieldValue(fieldKeyPath);
@@ -20,20 +20,20 @@ export default function FObjectField (props) {
 
   return (
     <Comp
-      {...CompProps}
       form={form}
       fieldKeyPath={fieldKeyPath}
       onRef={form.registerField(fieldKeyPath, {
         validation: validation
       })}
       helperText={getHelperText(fieldMetaData)}
+      {...getCompProps({ value: value })}
     />
   );
 }
 
 FObjectField.propTypes = {
   Comp: PropTypes.any,
-  CompProps: PropTypes.object,
+  getCompProps: PropTypes.func,
   form: PropTypes.object,
   fieldKeyPath: PropTypes.string,
   validateOnChange: PropTypes.bool,

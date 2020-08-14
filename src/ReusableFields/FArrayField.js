@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { getHelperText, useIsMount, MemoField } from './FieldUtils';
+import { getHelperText, useIsMount, MemoField, getEmptyObject } from './FieldUtils';
 
 export default function FArrayField (props) {
-  const { form, fieldKeyPath, validation, Comp, CompProps = {}, ItemComp, ItemCompProps = {}, validateOnChange = true } = props;
+  const {
+    form, fieldKeyPath, validation, Comp, getCompProps = getEmptyObject,
+    ItemComp, getItemCompProps = getEmptyObject, validateOnChange = true } = props;
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
 
   const value = form.getFieldValue(fieldKeyPath);
@@ -25,13 +27,13 @@ export default function FArrayField (props) {
 
   return (
     <Comp
-      {...CompProps}
       form={form}
       fieldKeyPath={fieldKeyPath}
       onRef={form.registerField(fieldKeyPath, {
         validation: validation
       })}
       helperText={getHelperText(fieldMetaData)}
+      {...getCompProps({ value: value })}
     >
       {(value || []).map((itemValue, i) => {
         const itemFieldKeyPath = `${fieldKeyPath}.${i}`;
@@ -39,10 +41,10 @@ export default function FArrayField (props) {
         return (
           <ItemComp
             key={metaData.ukey || i}
-            {...ItemCompProps}
             fieldKeyPath={itemFieldKeyPath}
             arrayFieldKeyPath={fieldKeyPath}
             index={i}
+            {...getItemCompProps({ value: itemValue, index: i })}
           />
         );
       })}
@@ -52,9 +54,9 @@ export default function FArrayField (props) {
 
 FArrayField.propTypes = {
   Comp: PropTypes.any,
-  CompProps: PropTypes.object,
+  getCompProps: PropTypes.func,
   ItemComp: PropTypes.any,
-  ItemCompProps: PropTypes.object,
+  getItemCompProps: PropTypes.func,
   form: PropTypes.object,
   fieldKeyPath: PropTypes.string,
   validateOnChange: PropTypes.bool,
