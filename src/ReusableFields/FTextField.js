@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -20,10 +21,10 @@ export default function FTextField (props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  const handleChange = (event) => {
+  const handleChange = _.debounce((event) => {
     const value = event.target.value;
     form.setFieldValue(fieldKeyPath, value);
-  };
+  }, 100);
 
   const changeHandleProps = {};
   if (valueChange === 'onBlur') {
