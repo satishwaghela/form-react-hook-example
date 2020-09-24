@@ -40,9 +40,9 @@ const App = () => {
             const errorMsg = requiredValidation(value);
             callback(errorMsg);
           }}
-          TextFieldProps={{
+          getTextFieldProps={() => ({
             label: 'First Name'
-          }}
+          })}
         />
         <MemoFTextField
           form={form}
@@ -51,9 +51,9 @@ const App = () => {
             const errorMsg = requiredValidation(value);
             callback(errorMsg);
           }}
-          TextFieldProps={{
+          getTextFieldProps={() => ({
             label: 'Last Name'
-          }}
+          })}
         />
         <MemoFRadioGroup
           form={form}
@@ -77,14 +77,14 @@ const App = () => {
           form={form}
           fieldKeyPath='dummyname'
           valueKey='name'
-          AutocompleteProps={{
+          getAutocompleteProps={() => ({
             multiple: true,
             options: [{ name: 'Bob' }, { name: 'Alice' }],
             getOptionLabel: (option) => option.name
-          }}
-          TextFieldProps={{
+          })}
+          getTextFieldProps={() => ({
             label: 'Combo box'
-          }}
+          })}
         />
         <MemoFCheckboxGroup
           form={form}
@@ -112,9 +112,9 @@ const App = () => {
             const errorMsg = value ? '' : 'Please accept terms & conditions';
             callback(errorMsg);
           }}
-          FormControlLabelProps={{
+          getFormControlLabelProps={() => ({
             label: 'Terms & Conditions'
-          }}
+          })}
         />
         <Grid item xs={12}>
           <Button

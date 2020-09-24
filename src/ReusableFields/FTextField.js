@@ -21,16 +21,15 @@ export default function FTextField (props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  const handleChange = _.debounce((event) => {
-    const value = event.target.value;
+  const handleChange = _.debounce((value) => {
     form.setFieldValue(fieldKeyPath, value);
   }, 100);
 
   const changeHandleProps = {};
   if (valueChange === 'onBlur') {
-    changeHandleProps.onBlur = handleChange;
+    changeHandleProps.onBlur = (e) => handleChange(e.target.value);
   } else {
-    changeHandleProps.onChange = handleChange;
+    changeHandleProps.onChange = (e) => handleChange(e.target.value);
   }
 
   return (
