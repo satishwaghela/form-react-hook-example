@@ -23,14 +23,14 @@ export default function ArrayFieldExample (props) {
         }
       }}
       Comp={ArrayComp}
-      CompProps={{
+      getCompProps={() => ({
         form: form,
         fieldKeyPath: 'access'
-      }}
+      })}
       ItemComp={ArrayItem}
-      ItemCompProps={{
+      getItemCompProps={() => ({
         form: form
-      }}
+      })}
     />
   );
 }
@@ -86,10 +86,10 @@ function ArrayItem (props) {
         }
       }}
       Comp={ArrayItemComp}
-      CompProps={{
+      getCompProps={() => ({
         arrayFieldKeyPath: arrayFieldKeyPath,
         index: index
-      }}
+      })}
     />
   );
 }
@@ -125,27 +125,27 @@ function ArrayItemComp ({ fieldKeyPath, arrayFieldKeyPath, form, helperText, onR
         <MemoFTextField
           form={form}
           fieldKeyPath={fieldKeyPathRole}
-          TextFieldProps={{
+          getTextFieldProps={() => ({
             label: 'Role'
-          }}
+          })}
         />
       </td>
       <td>
         <MemoFTextField
           form={form}
           fieldKeyPath={fieldKeyPathUser}
-          TextFieldProps={{
+          getTextFieldProps={() => ({
             label: 'User'
-          }}
+          })}
         />
       </td>
       <td>
         <MemoFTextField
           form={form}
           fieldKeyPath={fieldKeyPathGroup}
-          TextFieldProps={{
+          getTextFieldProps={() => ({
             label: 'Group'
-          }}
+          })}
         />
       </td>
       <td>

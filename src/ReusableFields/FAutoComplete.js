@@ -3,19 +3,19 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { getHelperText, useIsMount, MemoField } from './FieldUtils';
+import { getHelperText, useIsMount, MemoField, getEmptyObject } from './FieldUtils';
 
 export default function FAutoComplete (props) {
   const {
-    AutocompleteProps = {}, TextFieldProps = {},
+    getAutocompleteProps = getEmptyObject, getTextFieldProps = getEmptyObject,
     form, fieldKeyPath, validation,
     valueKey, validateOnChange = true
   } = props;
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
 
-  const { multiple, options } = AutocompleteProps;
-
   const value = form.getFieldValue(fieldKeyPath);
+
+  const { multiple, options } = getAutocompleteProps({ value: value });
 
   const isMount = useIsMount();
   useEffect(() => {
@@ -69,12 +69,12 @@ export default function FAutoComplete (props) {
       <Autocomplete
         fullWidth
         value={selected}
-        {...AutocompleteProps}
         onChange={handleChange}
-        renderInput={(params) => <TextField {...params} {...TextFieldProps} />}
+        renderInput={(params) => <TextField {...params} {...getTextFieldProps({ value: value })} />}
         ref={form.registerField(fieldKeyPath, {
           validation: validation
         })}
+        {...getAutocompleteProps({ value: value })}
       />
       {getHelperText(fieldMetaData)}
     </>
@@ -82,8 +82,8 @@ export default function FAutoComplete (props) {
 }
 
 FAutoComplete.propTypes = {
-  AutocompleteProps: PropTypes.object,
-  TextFieldProps: PropTypes.object,
+  getAutocompleteProps: PropTypes.func,
+  getTextFieldProps: PropTypes.func,
   form: PropTypes.object,
   fieldKeyPath: PropTypes.string,
   validation: PropTypes.func,

@@ -12,9 +12,9 @@ export function useIsMount () {
 
 export function getHelperText (fieldMetaData) {
   if (fieldMetaData.validating) {
-    return <FormHelperText>Validating...</FormHelperText>;
+    return <FormHelperText className='form-helper validating'>Validating...</FormHelperText>;
   } else if (fieldMetaData.error) {
-    return <FormHelperText error>{fieldMetaData.error}</FormHelperText>;
+    return <FormHelperText error className='form-helper error'>{fieldMetaData.error}</FormHelperText>;
   } else {
     return null;
   }
@@ -34,3 +34,7 @@ export function MemoField (memoProps) {
     // eslint-disable-next-line
   }, [fieldKeyPath, value, _.isEmpty(metaData) ? '' : metaData]);
 };
+
+export function getEmptyObject () {
+  return {};
+}

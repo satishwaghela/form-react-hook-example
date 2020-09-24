@@ -5,11 +5,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import { getHelperText, useIsMount, MemoField } from './FieldUtils';
+import { getHelperText, useIsMount, MemoField, getEmptyObject } from './FieldUtils';
 
 export default function FCheckboxGroup (props) {
   const {
-    FormControlLabelProps, CheckboxProps, form, fieldKeyPath, validation,
+    getFormControlLabelProps = getEmptyObject, getCheckboxProps = getEmptyObject, form, fieldKeyPath, validation,
     checkboxOptions, controlType = 'checkbox', validateOnChange = true
   } = props;
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
@@ -50,19 +50,19 @@ export default function FCheckboxGroup (props) {
       {checkboxOptions.map((option, i) => (
         <FormControlLabel
           key={i}
-          {...FormControlLabelProps}
           label={option.label}
           control={(
             <ControlComp
-              {...CheckboxProps}
               name={option.value}
               checked={value.includes(option.value)}
               onChange={handleChange}
+              {...getCheckboxProps({ value: value, option })}
             />
           )}
           ref={form.registerField(fieldKeyPath, {
             validation: validation
           })}
+          {...getFormControlLabelProps({ value: value, option })}
         />
       ))}
       {getHelperText(fieldMetaData)}
@@ -71,8 +71,8 @@ export default function FCheckboxGroup (props) {
 }
 
 FCheckboxGroup.propTypes = {
-  FormControlLabelProps: PropTypes.object,
-  CheckboxProps: PropTypes.object,
+  getFormControlLabelProps: PropTypes.func,
+  getCheckboxProps: PropTypes.func,
   form: PropTypes.object,
   fieldKeyPath: PropTypes.string,
   validation: PropTypes.func,
