@@ -48,9 +48,10 @@ export default function FTextField (props) {
         defaultValue={value || ''}
         ref={ref => {
           textFieldRef = ref;
-          form.registerField(fieldKeyPath, {
+          const formRef = form.registerField(fieldKeyPath, {
             validation: validation
           });
+          formRef.current = ref;
         }}
         {...textFieldProps}
       />
