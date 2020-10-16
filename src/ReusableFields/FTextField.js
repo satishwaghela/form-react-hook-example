@@ -11,12 +11,17 @@ export default function FTextField (props) {
   const fieldMetaData = form.getFieldMetaData(fieldKeyPath);
 
   const value = form.getFieldValue(fieldKeyPath);
+  let textFieldRef;
 
   const isMount = useIsMount();
   useEffect(() => {
     if (validateOnChange && !isMount) {
       const validator = form.getValidator(fieldKeyPath, value);
       validator && validator();
+    }
+    const input = textFieldRef.querySelector('input');
+    if (input.value !== value) {
+      input.value = value || '';
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
@@ -32,6 +37,8 @@ export default function FTextField (props) {
     changeHandleProps.onChange = (e) => handleChange(e.target.value);
   }
 
+  const textFieldProps = getTextFieldProps({ value: value }) || {};
+
   return (
     <>
       <TextField
@@ -39,10 +46,13 @@ export default function FTextField (props) {
         fullWidth
         {...changeHandleProps}
         defaultValue={value || ''}
-        ref={form.registerField(fieldKeyPath, {
-          validation: validation
-        })}
-        {...getTextFieldProps({ value: value })}
+        ref={ref => {
+          textFieldRef = ref;
+          form.registerField(fieldKeyPath, {
+            validation: validation
+          });
+        }}
+        {...textFieldProps}
       />
       {getHelperText(fieldMetaData)}
     </>

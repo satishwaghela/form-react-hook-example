@@ -22,7 +22,7 @@ export function getHelperText (fieldMetaData) {
 
 export function MemoField (memoProps) {
   const { Field, props } = memoProps;
-  const { form, fieldKeyPath } = props;
+  const { form, fieldKeyPath, memoDepArr = [] } = props;
   const value = form.getFieldValue(fieldKeyPath);
   const metaData = form.getFieldMetaData(fieldKeyPath);
   return useMemo(() => {
@@ -32,7 +32,7 @@ export function MemoField (memoProps) {
       />
     );
     // eslint-disable-next-line
-  }, [fieldKeyPath, value, _.isEmpty(metaData) ? '' : metaData]);
+  }, [fieldKeyPath, value, _.isEmpty(metaData) ? '' : metaData, ...memoDepArr]);
 };
 
 export function getEmptyObject () {
